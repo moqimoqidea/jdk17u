@@ -479,8 +479,14 @@ bool CompiledMethod::clean_ic_if_metadata_is_dead(CompiledIC *ic) {
         ShouldNotReachHere();
       }
     } else {
+      // FIXME: GC accidentally cleans valid megamorphic vtable inline caches
+      // https://bugs.openjdk.org/browse/JDK-8277212
+      // https://github.com/openjdk/jdk17u/commit/ed45df2ea7e33f943b8efb2c581c581686c06e88
+      // https://github.com/openjdk/jdk17u/pull/303
+
       // This inline cache is a megamorphic vtable call. Those ICs never hold
       // any Metadata and should therefore never be cleaned by this function.
+      // 此内联缓存是一个巨型vtable调用。这些IC永远不会保存任何元数据，因此永远不应该通过此功能进行清理。
       return true;
     }
   }
